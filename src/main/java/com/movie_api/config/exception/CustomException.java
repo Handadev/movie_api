@@ -1,6 +1,11 @@
 package com.movie_api.config.exception;
 
-public class CustomException extends Exception {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
+@AllArgsConstructor
+public class CustomException extends RuntimeException {
+    private final ErrorCode errorCode;
 
 }

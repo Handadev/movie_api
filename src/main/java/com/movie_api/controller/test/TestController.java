@@ -1,10 +1,13 @@
 package com.movie_api.controller.test;
 
+import com.movie_api.config.exception.CustomException;
+import com.movie_api.config.exception.ErrorCode;
 import com.movie_api.response.RestResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -17,7 +20,12 @@ public class TestController {
 
 
     @GetMapping(value = "/sample")
-    public ResponseEntity<?> sample() {
+    public ResponseEntity<?> sample(@RequestParam String val) {
+
+        if ("ex".equals(val)) {
+            throw new CustomException(ErrorCode.INVALID_PARAMETER);
+        }
+
         HashMap<String, String> a = new HashMap<>();
         a.put("aaa", "aaa");
         a.put("aaa", "aaa");
@@ -25,13 +33,7 @@ public class TestController {
         a.put("aaa", "aaa");
         a.put("aaa", "aaa");
 
-        log.info("a = {}",a);
-        RestResponse restResponse = new RestResponse();
 
-        ResponseEntity<String> entity = restResponse.ok().setBody(a)
-                .responseEntity();
-
-        System.out.println("restResponse = " + entity);
         return new RestResponse().ok().setBody(a).responseEntity();
     }
 }

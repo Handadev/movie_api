@@ -13,3 +13,8 @@ server:
   servlet:
     encoding:
       charset: UTF-8
+  error:
+    include-exception: false
+    include-stacktrace: never
+    whitelabel:
+      enabled: false

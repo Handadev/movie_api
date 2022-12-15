@@ -2,6 +2,8 @@ package com.movie_api.response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movie_api.config.exception.CustomException;
+import com.movie_api.config.exception.ErrorCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,19 @@ public class RestResponse {
         addHeader("charset", "utf-8");
         addCorsHeader();
     }
+
+    private RestResponse addCorsHeader() {
+        String localOrigin = "*";
+        String localMethods = "POST, GET, DELETE, PUT, OPTIONS";
+        String localMaxAge = "3600";
+        String localHeaders = "Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization";
+        addHeader("Access-Control-Allow-Origin", localOrigin);
+        addHeader("Access-Control-Allow-Methods", localMethods);
+        addHeader("Access-Control-Max-Age", localMaxAge);
+        addHeader("Access-Control-Allow-Headers", localHeaders);
+        return this;
+    }
+
     public RestResponse ok() {
         RestResponse instance = new RestResponse();
         instance.setCode(HttpStatus.OK.value());
@@ -48,7 +63,6 @@ public class RestResponse {
 
     public RestResponse setBody (HashMap<String, ?> data) {
         this.data = data;
-        log.info("data ={}", this.data);
         return this;
     }
 
@@ -59,24 +73,12 @@ public class RestResponse {
         return new ResponseEntity<String>(toJsonString(), headers, HttpStatus.valueOf(this.code));
     }
 
-    public RestResponse customException(int code , int subCode, String message) {
+    public RestResponse customException(ErrorCode e) {
         RestResponse instance = new RestResponse();
-        instance.setCode(code);
-        instance.setSubCode(subCode);
-        instance.setMessage(message);
-        return this;
-    }
-
-    private RestResponse addCorsHeader() {
-        String localOrigin = "*";
-        String localMethods = "POST, GET, DELETE, PUT, OPTIONS";
-        String localMaxAge = "3600";
-        String localHeaders = "Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization";
-        addHeader("Access-Control-Allow-Origin", localOrigin);
-        addHeader("Access-Control-Allow-Methods", localMethods);
-        addHeader("Access-Control-Max-Age", localMaxAge);
-        addHeader("Access-Control-Allow-Headers", localHeaders);
-        return this;
+        instance.setCode(e.getCode());
+        instance.setSubCode(e.getSubCode());
+        instance.setMessage(e.getMessage());
+        return instance;
     }
 
     private String toJsonString() {
