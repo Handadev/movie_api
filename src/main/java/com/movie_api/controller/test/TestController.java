@@ -28,10 +28,10 @@ public class TestController {
 
         HashMap<String, String> a = new HashMap<>();
         a.put("aaa", "aaa");
-        a.put("aaa", "aaa");
-        a.put("aaa", "aaa");
-        a.put("aaa", "aaa");
-        a.put("aaa", "aaa");
+        a.put("bbb", "aaa");
+        a.put("ccc", "aaa");
+        a.put("ddd", "aaa");
+        a.put("eee", "aaa");
 
 
         return new RestResponse().ok().setBody(a).responseEntity();

@@ -1,8 +1,6 @@
 package com.movie_api.response;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.movie_api.config.exception.CustomException;
 import com.movie_api.config.exception.ErrorCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -63,6 +61,8 @@ public class RestResponse {
 
     public RestResponse setBody (HashMap<String, ?> data) {
         this.data = data;
+        log.info("this.data ={}", this.data);
+
         return this;
     }
 
