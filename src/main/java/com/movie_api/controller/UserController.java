@@ -20,9 +20,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<?> findUser() {
-        HashMap<String, Object> user = userService.findUser("5461");
-        log.info("contorller User ={}" ,user);
+    public ResponseEntity<?> findAll() {
+        HashMap<String, Object> user = userService.allUser();
         return new RestResponse().ok().setBody(user).responseEntity();
     }
 }

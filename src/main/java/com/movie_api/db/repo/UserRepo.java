@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface UserRepo extends MongoRepository<User, String> {
     List<User> findByMobileNoLike(String mobileNo);
+    List<User> findAll();
 }

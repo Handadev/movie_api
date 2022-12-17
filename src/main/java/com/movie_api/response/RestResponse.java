@@ -45,7 +45,6 @@ public class RestResponse {
     public RestResponse ok() {
         RestResponse instance = new RestResponse();
         instance.setCode(HttpStatus.OK.value());
-        System.out.println(" = " + instance.code);
         return instance;
     }
 
@@ -61,15 +60,11 @@ public class RestResponse {
 
     public RestResponse setBody (HashMap<String, ?> data) {
         this.data = data;
-        log.info("this.data ={}", this.data);
-
         return this;
     }
 
     public ResponseEntity<String> responseEntity() {
-        log.info("toJsonString ={}", toJsonString());
-        log.info("headers ={}", headers);
-        log.info("code ={}", this.code);
+        log.info("Response >>> {}", toJsonString());
         return new ResponseEntity<String>(toJsonString(), headers, HttpStatus.valueOf(this.code));
     }
 
