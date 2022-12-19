@@ -18,3 +18,8 @@ server:
     include-stacktrace: never
     whitelabel:
       enabled: false
+
+
+secret:
+  aes256key: /F-JaNdRgUkXp2s5v8y/B?D(G+KbPeSh
+  iv: 5u8x/A%D*G-KaPdS

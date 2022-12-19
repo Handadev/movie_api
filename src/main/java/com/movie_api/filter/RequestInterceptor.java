@@ -7,13 +7,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
-public class RequestFilter extends HelperClass implements HandlerInterceptor {
+public class RequestInterceptor extends HelperClass implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // header
@@ -27,12 +28,12 @@ public class RequestFilter extends HelperClass implements HandlerInterceptor {
         // parmam
         HashMap<String, Object> paramMap = new LinkedHashMap<>();
         request.getParameterMap().forEach((key, val) -> {
-            paramMap.put(key, val);
+            paramMap.put(key, Arrays.stream(val).collect(Collectors.joining()));
         });
 
-        log.info("Request url >>> {}", request.getRequestURI());
+        log.info("Request url    >>> {}", request.getRequestURI());
         log.info("Requset Header >>> {}", headerMap);
-        log.info("Requset param >>> {}", paramMap);
+        log.info("Requset param  >>> {}", paramMap);
         return true;
     }
 
