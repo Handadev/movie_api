@@ -7,5 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CustomException extends RuntimeException {
     private final ErrorCode errorCode;
+    public CustomException setErrorMsg(String replaceStr) {
+        errorCode.setMessage(errorCode.getMessage().replace("{}", replaceStr));
+        return this;
+    }
 
 }

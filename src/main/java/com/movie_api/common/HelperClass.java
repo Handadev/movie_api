@@ -36,7 +36,7 @@ public class HelperClass {
 
     public String getParam(String key) {
         String parameter = getRequest().getParameter(key);
-        if (parameter == null) throw new CustomException(ErrorCode.INVALID_PARAMETER);
+        if (parameter == null) throw new CustomException(ErrorCode.INVALID_PARAMETER).setErrorMsg(key);
         return parameter;
     }
 
@@ -48,7 +48,7 @@ public class HelperClass {
 
     public Integer getIntegerParam(String key) {
         String parameter = getRequest().getParameter(key);
-        if (parameter == null) throw new CustomException(ErrorCode.INVALID_PARAMETER);
+        if (parameter == null) throw new CustomException(ErrorCode.INVALID_PARAMETER).setErrorMsg(key);
         return Integer.valueOf(parameter);
     }
 

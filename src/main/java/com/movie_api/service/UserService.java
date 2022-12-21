@@ -54,4 +54,17 @@ public class UserService extends HelperClass {
 
         return new HashMap<>();
     }
+
+    public HashMap<String, Object> userLogin(User user) {
+        List<User> userInfo = userRepo.findByLoginId(user.getLoginId());
+        // 계정 없을시
+        if (userInfo.isEmpty()) throw new CustomException(ErrorCode.USER_NOT_EXIST);
+        // 비밀번호 일치하지 않을시
+        if (user.getPw() != userInfo.get(0).getPw()) throw new CustomException(ErrorCode.LOGIN_FAIL);
+
+
+        return new HashMap<>(){{
+
+        }};
+    }
 }
