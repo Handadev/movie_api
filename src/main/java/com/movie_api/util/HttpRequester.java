@@ -7,13 +7,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -116,7 +113,7 @@ public class HttpRequester extends HelperClass {
             log.info("Request param >>> {}", params.toString());
             log.info("Response code >>> {}", res.statusCode());
             log.info("Response body >>> {}", res.body());
-        return strToJsonNode(res.body());
+        return strToJson(res.body());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
