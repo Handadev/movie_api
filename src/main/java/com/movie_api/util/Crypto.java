@@ -38,7 +38,7 @@ public class Crypto {
         }
     }
 
-    public String encodeSHA256(String text) {
+    public static String encodeSHA256(String text) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(text.getBytes("UTF-8"));

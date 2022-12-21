@@ -3,6 +3,8 @@ package com.movie_api.common;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.movie_api.config.exception.CustomException;
+import com.movie_api.config.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.web.context.request.RequestAttributes;
@@ -32,13 +34,25 @@ public class HelperClass {
         return servletResponse;
     }
 
-    public String getParam(String key, String defaultVal) {
+    public String getParam(String key) {
         String parameter = getRequest().getParameter(key);
-        if (parameter == null) parameter = defaultVal;
+        if (parameter == null) throw new CustomException(ErrorCode.INVALID_PARAMETER);
         return parameter;
     }
 
-    public Integer getIntegerParam(String key, Integer defaultVal) {
+    public String getParamOrDefault(String key, @Nullable String defaultVal) {
+        String parameter = getRequest().getParameter(key);
+        if (parameter == null) parameter = defaultVal == null ? null : defaultVal;
+        return parameter;
+    }
+
+    public Integer getIntegerParam(String key) {
+        String parameter = getRequest().getParameter(key);
+        if (parameter == null) throw new CustomException(ErrorCode.INVALID_PARAMETER);
+        return Integer.valueOf(parameter);
+    }
+
+    public Integer getIntegerParamOrDefault(String key, Integer defaultVal) {
         String parameter = getRequest().getParameter(key);
         if (parameter == null) return defaultVal;
         return Integer.valueOf(parameter);

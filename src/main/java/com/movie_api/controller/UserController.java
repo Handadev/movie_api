@@ -1,13 +1,13 @@
 package com.movie_api.controller;
 
+import com.movie_api.common.HelperClass;
+import com.movie_api.db.collection.User;
 import com.movie_api.response.RestResponse;
 import com.movie_api.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
@@ -15,7 +15,7 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/user")
 @AllArgsConstructor
-public class UserController {
+public class UserController extends HelperClass {
 
     private final UserService userService;
 
@@ -23,5 +23,26 @@ public class UserController {
     public ResponseEntity<?> findAll() {
         HashMap<String, Object> user = userService.allUser();
         return new RestResponse().ok().setBody(user).responseEntity();
+    }
+
+    @PostMapping
+    public ResponseEntity<?> insertUser() {
+        String loginId = getParam("loginId");
+        String name = getParam("name");
+        String mobileNo = getParam("mobileNo");
+        String pw = getParam("pw");
+
+        return new RestResponse().ok()
+                .setBody(userService.insertUser(
+                new User(loginId, name, mobileNo, pw)
+        )).responseEntity();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser() {
+        return new RestResponse().ok()
+                .setBody(userService.deleteUser(
+                getIntegerParam("userIdx")
+        )).responseEntity();
     }
 }
