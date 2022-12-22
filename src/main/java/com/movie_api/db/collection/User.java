@@ -14,6 +14,7 @@ public class User {
     @Transient
     public static final String SEQ_NAME = "user_seq";
 
+    public User() {}
     @PersistenceCreator
     public User(String loginId, String pw) {
         this.loginId = loginId;

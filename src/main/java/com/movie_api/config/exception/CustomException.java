@@ -1,5 +1,6 @@
 package com.movie_api.config.exception;
 
+import com.movie_api.properties.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

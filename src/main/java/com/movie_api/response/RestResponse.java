@@ -1,7 +1,7 @@
 package com.movie_api.response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.movie_api.config.exception.ErrorCode;
+import com.movie_api.properties.ErrorCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -31,14 +31,14 @@ public class RestResponse {
     }
 
     private RestResponse addCorsHeader() {
-        String localOrigin = "*";
-        String localMethods = "POST, GET, DELETE, PUT, OPTIONS";
-        String localMaxAge = "3600";
-        String localHeaders = "Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization";
-        addHeader("Access-Control-Allow-Origin", localOrigin);
-        addHeader("Access-Control-Allow-Methods", localMethods);
-        addHeader("Access-Control-Max-Age", localMaxAge);
-        addHeader("Access-Control-Allow-Headers", localHeaders);
+        String origin = "*";
+        String methods = "POST, GET, DELETE, PUT, OPTIONS";
+        String maxAge = "3600";
+        String headers = "Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization";
+        addHeader("Access-Control-Allow-Origin", origin);
+        addHeader("Access-Control-Allow-Methods", methods);
+        addHeader("Access-Control-Max-Age", maxAge);
+        addHeader("Access-Control-Allow-Headers", headers);
         return this;
     }
 
