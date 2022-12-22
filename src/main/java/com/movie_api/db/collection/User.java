@@ -1,6 +1,7 @@
 package com.movie_api.db.collection;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -29,6 +30,8 @@ public class User {
         this.pw = pw;
         this.regDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));;
     }
+
+    @Id
     private Long id;
     private String loginId;
     private String name;
