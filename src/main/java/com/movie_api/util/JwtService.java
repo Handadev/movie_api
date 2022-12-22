@@ -3,7 +3,6 @@ package com.movie_api.util;
 import com.movie_api.config.exception.CustomException;
 import com.movie_api.db.collection.User;
 import com.movie_api.properties.ErrorCode;
-import com.movie_api.properties.JwtCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -25,47 +24,51 @@ public class JwtService {
     private final String JWT_HEADER = "Authorization";
     private final String ISSUER = "movie";
     private final String SECRET = "p2s5v8y/B?E(H+MbQeThWmZq4t6w9z$C";
-    private final int ACCESS_EXPIRE_TIME = 60 * 10;           // 10분
-    private final int REFRESH_EXPIRE_TIME = 60 * 60 * 24 * 7; // 7일
+    private final int ACCESS_EXPIRE_TIME = 1000 * 60 * 10;            // 10분
+    private final int REFRESH_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 30; // 30일
     private final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
 
 
-    public String generateToken(User user, String tokenType) {
+    public String createAccessToken(User user, String tokenType) {
         Date now = new Date();
-        Date expireTime;
+        Date expireTime = new Date(now.getTime() + ACCESS_EXPIRE_TIME);
+        return createToken(user, expireTime);
+    }
 
-        if (tokenType == JwtCode.ACCESS_TOKEN.getType()) {
-            expireTime = new Date(now.getTime() + ACCESS_EXPIRE_TIME);
-        } else {
-            expireTime = new Date(now.getTime() + REFRESH_EXPIRE_TIME);
-        }
+    public String createRefreshToken(User user) {
+        Date now = new Date();
+        Date  expireTime = new Date(now.getTime() + REFRESH_EXPIRE_TIME);
+        return createToken(user, expireTime);
+    }
 
+    public String createToken(User user, Date expireTime) {
         return Jwts.builder()
                 .setIssuer(ISSUER)
-                .setIssuedAt(expireTime)
-                .claim("userIdx", user.getId())
-                .claim("userId", crypto.encodeAES256(user.getLoginId()))
+                .setExpiration(expireTime)
+                .claim("idx", user.getId())
+                .claim("id", crypto.encodeAES256(user.getLoginId()))
                 .signWith(SECRET_KEY)
                 .compact();
     }
 
-    public Object validAndDecodeToken(String token) {
+    public Claims decodeToken(String token) {
         try {
-//            return Jwts.parserBuilder()
-//                    .setSigningKey(SECRET_KEY)
-//                    .requireIssuer(ISSUER)
-//                    .build()
-//                    .parse(token).getBody();
+             return Jwts.parserBuilder()
+                    .setSigningKey(SECRET_KEY)
+                    .requireIssuer(ISSUER)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (SignatureException e) {
-            log.error("Invalid JWT signature", e);
+            log.error("Invalid JWT signature");
         } catch (MalformedJwtException e) {
-            log.error("Invalid JWT token", e);
+            log.error("Invalid JWT token");
         } catch (ExpiredJwtException e) {
-            log.error("Expired JWT token", e);
+            log.error("Expired JWT token");
         } catch (UnsupportedJwtException e) {
-            log.error("Unsupported JWT token", e);
+            log.error("Unsupported JWT token");
         } catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty.", e);
+            log.error("JWT claims string is empty.");
         }
         return null;
     }
@@ -73,10 +76,12 @@ public class JwtService {
     public Claims decodeRequestToken(HttpServletRequest request) {
         String header = request.getHeader(JWT_HEADER);
         if (header.indexOf("Bearer") == -1) throw new CustomException(ErrorCode.TOKEN_INVALID);
-        return (Claims) validAndDecodeToken(header.replace("Bearer ", ""));
+        return decodeToken(header.replace("Bearer ", ""));
     }
 
-    public Claims decodeToken(String token) {
-        return (Claims) validAndDecodeToken(token);
+    public Claims getClaims(String token) {
+        return decodeToken(token);
     }
+
+
 }
