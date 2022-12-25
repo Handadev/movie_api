@@ -24,9 +24,7 @@ public class JwtTest {
         String accessToken = jwtService.createAccessToken(user, JwtCode.ACCESS_TOKEN.getType());
         System.out.println("accessToken => " + accessToken);
 
-        String exToken = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtb3ZpZSIsImV4cCI6MTY3MTcyNjk3OSwidXNlcklkeCI6MSwidXNlcklkIjoiQUdTUXYxU3RQWjlJTDVPMlc3STRkQT09In0.LD7NduSXnVfOzxFlWyu9wi6LW-miXIz2JFs5HNiDjR4";
-
-        Claims claims = jwtService.decodeToken(exToken);
+        Claims claims = jwtService.decodeToken(accessToken);
 
         System.out.println("claims = " + claims);
 

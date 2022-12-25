@@ -27,16 +27,15 @@ public class JwtService {
     private final int ACCESS_EXPIRE_TIME = 1000 * 60 * 10;            // 10분
     private final int REFRESH_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 30; // 30일
     private final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+    private final Date now = new Date();
 
 
     public String createAccessToken(User user, String tokenType) {
-        Date now = new Date();
         Date expireTime = new Date(now.getTime() + ACCESS_EXPIRE_TIME);
         return createToken(user, expireTime);
     }
 
     public String createRefreshToken(User user) {
-        Date now = new Date();
         Date  expireTime = new Date(now.getTime() + REFRESH_EXPIRE_TIME);
         return createToken(user, expireTime);
     }
@@ -47,6 +46,7 @@ public class JwtService {
                 .setExpiration(expireTime)
                 .claim("idx", user.getId())
                 .claim("id", crypto.encodeAES256(user.getLoginId()))
+                .claim("dt", crypto.encodeAES256(now.toString()))
                 .signWith(SECRET_KEY)
                 .compact();
     }
