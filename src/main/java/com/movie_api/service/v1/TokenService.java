@@ -1,7 +1,7 @@
 package com.movie_api.service.v1;
 
-import com.movie_api.config.exception.CustomException;
-import com.movie_api.config.exception.ErrorCode;
+import com.movie_api.exception.CustomException;
+import com.movie_api.exception.ErrorCode;
 import com.movie_api.util.jwt.JwtService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;

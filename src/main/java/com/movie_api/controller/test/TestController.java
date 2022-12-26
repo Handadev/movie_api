@@ -1,7 +1,7 @@
 package com.movie_api.controller.test;
 
-import com.movie_api.config.exception.CustomException;
-import com.movie_api.config.exception.ErrorCode;
+import com.movie_api.exception.CustomException;
+import com.movie_api.exception.ErrorCode;
 import com.movie_api.util.RestResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

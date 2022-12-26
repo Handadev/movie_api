@@ -1,4 +1,4 @@
-package com.movie_api.config.exception;
+package com.movie_api.exception;
 
 import com.movie_api.util.RestResponse;
 import lombok.extern.slf4j.Slf4j;

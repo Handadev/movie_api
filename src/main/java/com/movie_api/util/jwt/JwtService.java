@@ -1,14 +1,13 @@
 package com.movie_api.util.jwt;
 
-import com.movie_api.config.exception.CustomException;
+import com.movie_api.exception.CustomException;
 import com.movie_api.db.collection.User;
-import com.movie_api.config.exception.ErrorCode;
+import com.movie_api.exception.ErrorCode;
 import com.movie_api.properties.JwtProperty;
 import com.movie_api.util.Crypto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
