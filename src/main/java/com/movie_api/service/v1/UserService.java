@@ -1,8 +1,8 @@
-package com.movie_api.service;
+package com.movie_api.service.v1;
 
 import com.movie_api.common.HelperClass;
 import com.movie_api.config.exception.CustomException;
-import com.movie_api.properties.ErrorCode;
+import com.movie_api.config.exception.ErrorCode;
 import com.movie_api.db.MongoSeqGenerator;
 import com.movie_api.db.collection.User;
 import com.movie_api.db.repo.UserRepo;

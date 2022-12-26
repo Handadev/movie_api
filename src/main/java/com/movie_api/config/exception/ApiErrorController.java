@@ -1,7 +1,6 @@
 package com.movie_api.config.exception;
 
-import com.movie_api.properties.ErrorCode;
-import com.movie_api.response.RestResponse;
+import com.movie_api.util.RestResponse;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

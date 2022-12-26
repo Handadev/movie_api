@@ -1,4 +1,4 @@
-package com.movie_api.properties;
+package com.movie_api.util.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.movie_api.filter;
+package com.movie_api.preprocessor;
 
 import com.movie_api.common.HelperClass;
 import lombok.extern.slf4j.Slf4j;

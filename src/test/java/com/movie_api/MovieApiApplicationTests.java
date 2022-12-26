@@ -126,7 +126,5 @@ class MovieApiApplicationTests {
 
         JsonNode jsonNode = req.postWithHeader();
         System.out.println("jsonNode = " + jsonNode);
-
     }
-
 }

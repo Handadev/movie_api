@@ -23,3 +23,7 @@ server:
 secret:
   aes256key: /F-JaNdRgUkXp2s5v8y/B?D(G+KbPeSh
   iv: 5u8x/A%D*G-KaPdS
+
+jwt:
+  issuer: movie
+  secret: p2s5v8y/B?E(H+MbQeThWmZq4t6w9z$C

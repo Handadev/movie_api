@@ -1,7 +1,7 @@
-package com.movie_api.response;
+package com.movie_api.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.movie_api.properties.ErrorCode;
+import com.movie_api.config.exception.ErrorCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

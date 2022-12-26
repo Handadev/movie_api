@@ -2,8 +2,7 @@ package com.movie_api;
 
 
 import com.movie_api.db.collection.User;
-import com.movie_api.properties.JwtCode;
-import com.movie_api.util.JwtService;
+import com.movie_api.util.jwt.JwtService;
 import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class JwtTest {
         user.setId(1L);
         user.setLoginId("tester");
 
-        String accessToken = jwtService.createAccessToken(user, JwtCode.ACCESS_TOKEN.getType());
+        String accessToken = jwtService.createAccessToken(user);
         System.out.println("accessToken => " + accessToken);
 
         Claims claims = jwtService.decodeToken(accessToken);
