@@ -10,6 +10,7 @@ import com.movie_api.util.Crypto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,24 +32,24 @@ public class UserService extends HelperClass {
     }
 
     public HashMap<String, Object> insertUser(User user) {
-        List<User> registeredUser = userRepo.findByLoginId(user.getLoginId());
+        User registeredUser = userRepo.findByLoginId(user.getLoginId());
         // 이미 가입된 계정 체크
-        if (!registeredUser.isEmpty()) throw new CustomException(ErrorCode.ID_EXIST);
+        if (ObjectUtils.isEmpty(registeredUser)) throw new CustomException(ErrorCode.ID_EXIST);
         // 비밀번호 길이 체크
         if (user.getPw().length() < 8 || user.getPw().length() > 20) throw new CustomException(ErrorCode.PW_LENGTH);
 
         user.setId(seqGenerator.generateSeq(User.SEQ_NAME));
         user.setPw(Crypto.encodeSHA256(user.getPw()));
 
-        userRepo.insert(user);
+        userRepo.save(user);
 
         return new HashMap<>();
     }
 
     public HashMap<String, Object> deleteUser(int userIdx) {
-        List<User> registeredUser = userRepo.findById(userIdx);
+        User registeredUser = userRepo.findById(userIdx);
         // 계정 없을시
-        if (registeredUser.isEmpty()) throw new CustomException(ErrorCode.USER_NOT_EXIST);
+        if (ObjectUtils.isEmpty(registeredUser)) throw new CustomException(ErrorCode.USER_NOT_EXIST);
 
         userRepo.deleteById(userIdx);
 
@@ -56,12 +57,11 @@ public class UserService extends HelperClass {
     }
 
     public HashMap<String, Object> userLogin(User user) {
-        List<User> userInfo = userRepo.findByLoginId(user.getLoginId());
+        User userInfo = userRepo.findByLoginId(user.getLoginId());
         // 계정 없을시
-        if (userInfo.isEmpty()) throw new CustomException(ErrorCode.USER_NOT_EXIST);
+        if (ObjectUtils.isEmpty(userInfo)) throw new CustomException(ErrorCode.USER_NOT_EXIST);
         // 비밀번호 일치하지 않을시
-        if (user.getPw() != userInfo.get(0).getPw()) throw new CustomException(ErrorCode.LOGIN_FAIL);
-
+        if (user.getPw() != userInfo.getPw()) throw new CustomException(ErrorCode.LOGIN_FAIL);
 
         return new HashMap<>(){{
 

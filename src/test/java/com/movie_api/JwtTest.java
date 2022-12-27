@@ -17,11 +17,17 @@ public class JwtTest {
     @Test
     void tokenTest() {
         User user = new User();
-        user.setId(1L);
-        user.setLoginId("tester");
+        user.setId(3L);
+        user.setLoginId("tester1");
 
         String accessToken = jwtService.createAccessToken(user);
-        System.out.println("accessToken => " + accessToken);
+        String refreshToken = jwtService.createRefreshToken(user);
+        System.out.println("accessToken  => " + accessToken);
+        System.out.println("refreshToken => " + refreshToken);
+
+        // eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtb3ZpZSIsImV4cCI6MTY3MjExNjk2NSwiaWR4IjozLCJpZCI6IkxCZE5Lb0MvWlI0S0R4cW1YWVZ0N1E9PSIsImR0IjoieXVUa0JjaUt0L3BVSWtyTGlHSkgrWTNhSEJkSVJVbEpIK1FsYURCOUxvQT0ifQ.5sqLCebiSKw_KIi1RxBQK2-zCdJq-A71fBStdE8cKBI
+        // eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtb3ZpZSIsImV4cCI6MTY3NDcwODkwNSwiaWR4IjozLCJpZCI6IkxCZE5Lb0MvWlI0S0R4cW1YWVZ0N1E9PSIsImR0IjoieXVUa0JjaUt0L3BVSWtyTGlHSkgrWms0Q3FKdXI0cFdVellpenlrQUhFMD0ifQ.4aixMrgVzQNiEgG1KX0MM5cwJ3TvFQKcemRHPIcYBjk
+
 
         Claims claims = jwtService.decodeToken(accessToken);
 

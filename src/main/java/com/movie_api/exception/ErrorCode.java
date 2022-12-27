@@ -19,11 +19,14 @@ public enum ErrorCode {
     PW_LENGTH(200, 202, "비밀번호는 8 ~ 20 자리입니다"),
     USER_NOT_EXIST(200, 203, "계정이 존재하지 않습니다"),
     LOGIN_FAIL(200, 204, "로그인에 실패했습니다"),
+    DOUBLE_LOGIN(200, 205, "다른 곳에서 로그인 되었습니다"),
 
     // TOKEN ERROR
-    TOKEN_INVALID(400, 300, "토큰이 유효하지 않습니다"),
-    TOKEN_EXPIRED(400, 301, "토큰이 만료되었습니다"),
-
+    TOKEN_INVALID(400, 300, "Token invalid"),
+    ACCESS_TOKEN_EXPIRED(400, 301, "Token expired"),
+    ACCESS_TOKEN_NOT_EXPIRED(400, 302, "Token still works"),
+    REFRESH_TOKEN_EXPIRED(400, 303, "Token auth expired"),
+    TOKEN_NULL(400, 304, "Token does not exist"),
     ;
 
     private final int code;

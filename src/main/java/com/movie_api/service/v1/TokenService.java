@@ -1,60 +1,51 @@
 package com.movie_api.service.v1;
 
+import com.movie_api.common.HelperClass;
+import com.movie_api.db.collection.User;
+import com.movie_api.db.repo.UserRepo;
+import com.movie_api.db.repo.UserTokenRepo;
 import com.movie_api.exception.CustomException;
 import com.movie_api.exception.ErrorCode;
+import com.movie_api.util.Crypto;
 import com.movie_api.util.jwt.JwtService;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
 
 @Slf4j
 @Service
 @AllArgsConstructor
-public class TokenService {
+public class TokenService extends HelperClass {
 
-    private JwtService jwtService;
+    private final Crypto crypto;
+    private final JwtService jwtService;
+    private final UserRepo userRepo;
 
-    public HashMap<String, Object> regenerateToken(String accessToken) {
-        // jwt token decode
-        try {
-            Claims claims = decodeExpireToken(accessToken);
-            int userIdx = (Integer) claims.get("idx");
-            log.info("userIdx >>>>>>>>>>>>>>>>>>>>>>>>>>>> {}", userIdx);
-        } catch (ExpiredJwtException e) {
-            log.info("userIdx >>>>>>>>>>>>>>>>>>>>>>>>>>>> 만룔오롱로어롱러오러");
-        }
-        // get userIdx
+    // 중복로그인 검사는 interceptor에서 진행하기 때문에 할 필요 없음
+    public HashMap<String, Object> regenerateToken(String accessToken, String refreshToken) {
+        // accessToken 만료 확인
+        if(!jwtService.isTokenExpired(accessToken)) throw new CustomException(ErrorCode.ACCESS_TOKEN_NOT_EXPIRED);
 
-        // check refreshToken from db
+        // refreshToken 만료 확인
+        if(jwtService.isTokenExpired(refreshToken)) throw new CustomException(ErrorCode.REFRESH_TOKEN_EXPIRED);
 
-        // regenerate refreshToken if refreshToken is Expired
+        // 유저확인
+        Claims claims = jwtService.decodeToken(refreshToken);
+        User user = userRepo.findByLoginId(crypto.decodeAES256(claims.get("id").toString()));
 
-        // regenerate accessToken
+        if (ObjectUtils.isEmpty(user)) throw new CustomException(ErrorCode.USER_NOT_EXIST);
 
-        return new HashMap<>();
+        // accessToken 재발급
+        String token = jwtService.createAccessToken(user);
+
+        return new HashMap<>(){{
+            put("accessToken", token);
+        }};
     }
 
-    public Claims decodeExpireToken(String token) {
-        try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(jwtService.getSecret())
-                    .requireIssuer(jwtService.getIssuer())
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (SignatureException e) {
-            log.error("Invalid Access JWT signature");
-        } catch (MalformedJwtException e) {
-            log.error("Invalid Access JWT token");
-        } catch (UnsupportedJwtException e) {
-            log.error("Unsupported Access JWT token");
-        } catch (IllegalArgumentException e) {
-            log.error("Access JWT claims string is empty.");
-        }
-        throw new CustomException(ErrorCode.TOKEN_INVALID);
-    }
+
 }

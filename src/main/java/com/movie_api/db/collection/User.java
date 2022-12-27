@@ -37,8 +37,6 @@ public class User {
     private String name;
     private String mobileNo;
     private String pw;
-    private String accessToken;
-    private String refreshToken;
     private String regDate;
     private String loginDate;
 }

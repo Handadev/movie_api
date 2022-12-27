@@ -10,11 +10,8 @@ public interface UserRepo extends MongoRepository<User, BigInteger> {
     // 비밀번호는 출력하지 않음
     @Query(value = "{}", fields = "{'pw':0}")
     List<User> findAll();
-    List<User> findByLoginId(String loginId);
-    List<User> findById(int id);
-    User insert(User user);
-
+    User findByLoginId(String loginId);
+    User findById(int id);
     User deleteById(int id);
-
 
 }

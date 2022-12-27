@@ -1,6 +1,8 @@
 package com.movie_api.controller.v1;
 
 import com.movie_api.common.HelperClass;
+import com.movie_api.exception.CustomException;
+import com.movie_api.exception.ErrorCode;
 import com.movie_api.util.RestResponse;
 import com.movie_api.service.v1.TokenService;
 import lombok.AllArgsConstructor;
@@ -20,12 +22,12 @@ public class TokenController extends HelperClass {
 
     @PostMapping("/regenerate")
     public ResponseEntity<?> regenerateToken() {
-        String accessToken = getParam("accessToken");
-
-
+        String accessToken =  getRequest().getParameter("accessToken");
+        String refreshToken = getRequest().getParameter("refreshToken");
+        if (refreshToken == null || accessToken == null) throw new CustomException(ErrorCode.TOKEN_NULL);
 
         return new RestResponse().ok()
-                .setBody(tokenService.regenerateToken(accessToken))
+                .setBody(tokenService.regenerateToken(accessToken, refreshToken))
                 .responseEntity();
     }
 }
