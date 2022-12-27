@@ -7,11 +7,15 @@ import com.movie_api.db.MongoSeqGenerator;
 import com.movie_api.db.collection.User;
 import com.movie_api.db.repo.UserRepo;
 import com.movie_api.util.Crypto;
+import com.movie_api.util.jwt.JwtService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,6 +26,8 @@ public class UserService extends HelperClass {
 
     private final UserRepo userRepo;
     private final MongoSeqGenerator seqGenerator;
+    private final JwtService jwtService;
+
     public HashMap<String, Object> allUser() {
         List<User> users = userRepo.findAll();
 
@@ -34,10 +40,11 @@ public class UserService extends HelperClass {
     public HashMap<String, Object> insertUser(User user) {
         User registeredUser = userRepo.findByLoginId(user.getLoginId());
         // 이미 가입된 계정 체크
-        if (ObjectUtils.isEmpty(registeredUser)) throw new CustomException(ErrorCode.ID_EXIST);
+        if (!ObjectUtils.isEmpty(registeredUser)) throw new CustomException(ErrorCode.ID_EXIST);
         // 비밀번호 길이 체크
         if (user.getPw().length() < 8 || user.getPw().length() > 20) throw new CustomException(ErrorCode.PW_LENGTH);
 
+        // _id autoIncrement
         user.setId(seqGenerator.generateSeq(User.SEQ_NAME));
         user.setPw(Crypto.encodeSHA256(user.getPw()));
 
@@ -56,6 +63,7 @@ public class UserService extends HelperClass {
         return new HashMap<>();
     }
 
+    @Transactional
     public HashMap<String, Object> userLogin(User user) {
         User userInfo = userRepo.findByLoginId(user.getLoginId());
         // 계정 없을시
@@ -63,8 +71,17 @@ public class UserService extends HelperClass {
         // 비밀번호 일치하지 않을시
         if (user.getPw() != userInfo.getPw()) throw new CustomException(ErrorCode.LOGIN_FAIL);
 
-        return new HashMap<>(){{
+        userInfo.setLoginDate(LocalDateTime.now());
 
+        // 사용자 로그인 일자 수정 저장
+
+        // access refresh token 생성
+
+        // 사용자 refreshToken 저장
+
+
+        return new HashMap<>(){{
+            // accessToken refreshToken 넘기기
         }};
     }
 }

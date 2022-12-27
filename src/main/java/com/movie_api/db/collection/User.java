@@ -16,19 +16,18 @@ public class User {
     public static final String SEQ_NAME = "user_seq";
 
     public User() {}
-    @PersistenceCreator
+
     public User(String loginId, String pw) {
         this.loginId = loginId;
         this.pw = pw;
     }
 
-    @PersistenceCreator
     public User(String loginId, String name, String mobileNo, String pw) {
         this.loginId = loginId;
         this.name = name;
         this.mobileNo = mobileNo;
         this.pw = pw;
-        this.regDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));;
+        this.regDate = LocalDateTime.now();
     }
 
     @Id
@@ -37,6 +36,6 @@ public class User {
     private String name;
     private String mobileNo;
     private String pw;
-    private String regDate;
-    private String loginDate;
+    private LocalDateTime regDate;
+    private LocalDateTime loginDate;
 }
