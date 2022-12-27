@@ -35,7 +35,7 @@ public class UserController extends HelperClass {
 
         return new RestResponse().ok()
                 .setBody(userService.insertUser(
-                new User(loginId, name, mobileNo, Crypto.encodeSHA256(pw))
+                new User(loginId, name, mobileNo, pw)
         )).responseEntity();
     }
 

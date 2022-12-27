@@ -1,10 +1,12 @@
 package com.movie_api.db.collection;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,7 +29,6 @@ public class User {
         this.name = name;
         this.mobileNo = mobileNo;
         this.pw = pw;
-        this.regDate = LocalDateTime.now();
     }
 
     @Id
@@ -36,6 +37,8 @@ public class User {
     private String name;
     private String mobileNo;
     private String pw;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime regDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime loginDate;
 }

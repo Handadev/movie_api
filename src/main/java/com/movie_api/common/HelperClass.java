@@ -3,6 +3,8 @@ package com.movie_api.common;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.movie_api.exception.CustomException;
 import com.movie_api.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
@@ -106,6 +108,7 @@ public class HelperClass {
     // obj to jsonString
     public String objToStr(Object obj) {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule()); // LocalDateTime 위한 세팅
         try {
             return mapper.writeValueAsString(obj);
         }  catch (JsonProcessingException e) {

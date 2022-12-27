@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,6 +46,7 @@ public class UserService extends HelperClass {
         // _id autoIncrement
         user.setId(seqGenerator.generateSeq(User.SEQ_NAME));
         user.setPw(Crypto.encodeSHA256(user.getPw()));
+        user.setRegDate(LocalDateTime.now());
 
         userRepo.save(user);
 

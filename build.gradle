@@ -28,6 +28,10 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    // 추가 jackson
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8'
+
+
     // Mongo DB
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
