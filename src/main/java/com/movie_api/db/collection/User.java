@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -32,13 +33,26 @@ public class User {
     }
 
     @Id
+    @Field("_id")
     private Long id;
+
+    @Field("loginId")
     private String loginId;
+
+    @Field("name")
     private String name;
+
+    @Field("mobileNo")
     private String mobileNo;
+
+    @Field("pw")
     private String pw;
+
+    @Field("regDate")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime regDate;
+
+    @Field("loginDate")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime loginDate;
 }

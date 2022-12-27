@@ -3,19 +3,22 @@ package com.movie_api.db.collection;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.Collection;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
 @Document(collection = "userTokens")
-public class UserToken {
+public class UserTokens {
 
-    public UserToken(Long id, String refreshToken) {
-        this.id = id;
+    public UserTokens(Long userIdx, String refreshToken) {
+        this.userIdx = userIdx;
         this.refreshToken = refreshToken;
     }
 
     @Id
-    private Long id;
+    private String id;
+    @Field("userIdx")
+    private Long userIdx;
+
+    @Field("refreshToken")
     private String refreshToken;
 }

@@ -42,13 +42,13 @@ public class JwtService {
     }
 
     public String createAccessToken(User user) {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = user.getLoginDate();
         Date expireTime = Date.from(now.plusMinutes(ACCESS_EXPIRE_MINUTE).atZone(ZoneId.systemDefault()).toInstant());
         return createToken(user, now, expireTime);
     }
 
     public String createRefreshToken(User user) {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = user.getLoginDate();
         Date expireTime = Date.from(now.plusDays(REFRESH_EXPIRE_DATE).atZone(ZoneId.systemDefault()).toInstant());
         return createToken(user, now, expireTime);
     }

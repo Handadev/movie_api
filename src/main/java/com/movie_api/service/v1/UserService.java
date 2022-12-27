@@ -1,6 +1,8 @@
 package com.movie_api.service.v1;
 
 import com.movie_api.common.HelperClass;
+import com.movie_api.db.collection.UserTokens;
+import com.movie_api.db.repo.UserTokenRepo;
 import com.movie_api.exception.CustomException;
 import com.movie_api.exception.ErrorCode;
 import com.movie_api.db.MongoSeqGenerator;
@@ -24,6 +26,7 @@ import java.util.List;
 public class UserService extends HelperClass {
 
     private final UserRepo userRepo;
+    private final UserTokenRepo tokenRepo;
     private final MongoSeqGenerator seqGenerator;
     private final JwtService jwtService;
 
@@ -64,24 +67,37 @@ public class UserService extends HelperClass {
     }
 
     @Transactional
-    public HashMap<String, Object> userLogin(User user) {
-        User userInfo = userRepo.findByLoginId(user.getLoginId());
+    public HashMap<String, Object> userLogin(User obj) {
+        User userInfo = userRepo.findByLoginId(obj.getLoginId());
+        log.info("login Info  = {}", obj);
+        log.info("result Info = {}", userInfo);
+
         // 계정 없을시
         if (ObjectUtils.isEmpty(userInfo)) throw new CustomException(ErrorCode.USER_NOT_EXIST);
         // 비밀번호 일치하지 않을시
-        if (user.getPw() != userInfo.getPw()) throw new CustomException(ErrorCode.LOGIN_FAIL);
+        if (!obj.getPw().equals(userInfo.getPw())) throw new CustomException(ErrorCode.LOGIN_FAIL);
 
-        userInfo.setLoginDate(LocalDateTime.now());
 
         // 사용자 로그인 일자 수정 저장
+        userInfo.setLoginDate(LocalDateTime.now());
+        userRepo.save(userInfo);
 
         // access refresh token 생성
+        String accessToken = jwtService.createAccessToken(userInfo);
+        String refreshToken = jwtService.createRefreshToken(userInfo);
 
         // 사용자 refreshToken 저장
-
+        UserTokens tokenInfo = tokenRepo.findByUserIdx(userInfo.getId());
+        if (ObjectUtils.isEmpty(tokenInfo)) {
+            tokenRepo.save(new UserTokens(userInfo.getId(), refreshToken));
+        } else {
+            tokenInfo.setRefreshToken(refreshToken);
+            tokenRepo.save(tokenInfo);
+        }
 
         return new HashMap<>(){{
-            // accessToken refreshToken 넘기기
+            put("accessToken", accessToken);
+            put("refreshToken", refreshToken);
         }};
     }
 }

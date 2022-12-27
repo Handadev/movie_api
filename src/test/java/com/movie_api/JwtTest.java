@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
+
 @SpringBootTest
 public class JwtTest {
 
@@ -19,6 +21,7 @@ public class JwtTest {
         User user = new User();
         user.setId(3L);
         user.setLoginId("tester1");
+        user.setLoginDate(LocalDateTime.now());
 
         String accessToken = jwtService.createAccessToken(user);
         String refreshToken = jwtService.createRefreshToken(user);
