@@ -1,7 +1,7 @@
 package com.movie_api.util.jwt;
 
-import com.movie_api.exception.CustomException;
 import com.movie_api.db.collection.User;
+import com.movie_api.exception.CustomException;
 import com.movie_api.exception.ErrorCode;
 import com.movie_api.properties.JwtProperty;
 import com.movie_api.util.Crypto;

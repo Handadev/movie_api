@@ -2,9 +2,9 @@ package com.movie_api.controller.v1;
 
 import com.movie_api.common.HelperClass;
 import com.movie_api.db.collection.User;
-import com.movie_api.util.RestResponse;
 import com.movie_api.service.v1.UserService;
 import com.movie_api.util.Crypto;
+import com.movie_api.util.RestResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

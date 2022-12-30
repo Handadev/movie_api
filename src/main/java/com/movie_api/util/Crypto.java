@@ -3,7 +3,6 @@ package com.movie_api.util;
 import com.movie_api.properties.CryptoProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
