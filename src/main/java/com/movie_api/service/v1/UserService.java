@@ -12,7 +12,6 @@ import com.movie_api.util.Crypto;
 import com.movie_api.util.jwt.JwtService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.web.server.Cookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -94,8 +93,7 @@ public class UserService extends HelperClass {
             tokenRepo.save(tokenInfo);
         }
 
-        Cookie cookie = new Cookie();
-        cookie.setHttpOnly(true);
+        setCookie("refreshToken", refreshToken, null, true);
 
         return new HashMap<>(){{
             put("id", userInfo.getLoginId());

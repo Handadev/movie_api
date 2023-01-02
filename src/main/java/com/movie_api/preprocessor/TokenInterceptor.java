@@ -29,22 +29,21 @@ public class TokenInterceptor extends HelperClass implements HandlerInterceptor 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // accessToken check
-        Claims claims = jwtService.decodeRequestToken(request);
+        Claims accessClaim = jwtService.decodeRequestToken(request);
 
         // check registered user
-        String loginId = crypto.decodeAES256(claims.get("id").toString());
+        String loginId = crypto.decodeAES256(accessClaim.get("id").toString());
+        String accessLoginDate = crypto.decodeAES256(accessClaim.get("dt").toString());
         User userInfo = userRepo.findByLoginId(loginId);
         if (ObjectUtils.isEmpty(userInfo)) throw new CustomException(ErrorCode.TOKEN_INVALID);
 
         // get refreshToken
-        String header = request.getHeader(HttpHeaders.SET_COOKIE);
-
-
-        // check db refreshToken and httponly refreshToken to check duplicate login
+        String refreshToken = getCookie("refreshToken");
+        Claims refreshClaim = jwtService.decodeToken(refreshToken);
+        String refreshLoginDate = crypto.decodeAES256(refreshClaim.get("dt").toString());
 
         // throw error if login is duplicated
-
-        //
+        if(!accessLoginDate.equals(refreshLoginDate)) throw new CustomException(ErrorCode.DOUBLE_LOGIN);
         return true;
     }
 

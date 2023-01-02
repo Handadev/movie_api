@@ -29,6 +29,7 @@ public class PreProcessConfig implements WebMvcConfigurer {
             , "/error"
             , "/user/login"
             , "/user/logout"
+//            , "/user"
     };
 
     @Override

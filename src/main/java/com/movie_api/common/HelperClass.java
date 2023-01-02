@@ -71,7 +71,7 @@ public class HelperClass {
                 .orElse(null);
     }
 
-    public void setCookie(String name, @Nullable String value, @Nullable Integer age) {
+    public void setCookie(String name, @Nullable String value, @Nullable Integer age, @Nullable Boolean httpOnly) {
         HttpServletResponse response = getResponse();
 
         Cookie cookie = new Cookie(name, value);
@@ -80,6 +80,8 @@ public class HelperClass {
         if (age != null) cookie.setMaxAge(age * 60);
         // value 없으면 쿠키 삭제
         if (value == null) cookie.setMaxAge(0);
+        // http only 쿠키 설정
+        if (httpOnly != null && httpOnly != false) cookie.setHttpOnly(true);
 
         cookie.setPath("/");
 
