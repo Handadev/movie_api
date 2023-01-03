@@ -1,6 +1,7 @@
 package com.movie_api.db.collection;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -43,6 +44,7 @@ public class User {
     private String mobileNo;
 
     @Field("pw")
+    @JsonIgnore
     private String pw;
 
     @Field("regDate")
