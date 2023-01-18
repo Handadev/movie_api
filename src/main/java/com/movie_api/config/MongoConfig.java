@@ -3,8 +3,13 @@ package com.movie_api.config;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.MongoDatabaseFactory;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -17,7 +22,7 @@ import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
-import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 public class MongoConfig {
@@ -28,17 +33,26 @@ public class MongoConfig {
     private final String trustStoreFile = "src/main/resources/keystore/truststore2.jks";
     private final String trustStorePassword = "1234qwer";
 
+    // X509 인증설정이된 MongoDB 연결 init 설정
     @Bean
-    public MongoClientSettings mongoClientSettings(SSLContext mongoSSLContext, X509Certificate mongoClientCertificate) {
-        return MongoClientSettings.builder()
-                .applyToClusterSettings(builder -> builder.hosts(Arrays.asList(new ServerAddress("localhost", 9911))))
-                .applyToSslSettings(builder -> {
-                    builder.enabled(true);
-                    builder.context(mongoSSLContext);
-                    builder.invalidHostNameAllowed(true);
-                })
-                .credential(MongoCredential.createMongoX509Credential(mongoClientCertificate.getSubjectX500Principal().getName()))
-                .build();
+    public MongoClient initClient(SSLContext mongoSSLContext, X509Certificate mongoClientCertificate) {
+        return MongoClients.create(
+                MongoClientSettings.builder()
+                        .applyToClusterSettings(builder -> builder.hosts(Collections.singletonList(new ServerAddress("localhost", 9911))))
+                        .applyToSslSettings(builder -> {
+                            builder.enabled(true);
+                            builder.context(mongoSSLContext);
+                            builder.invalidHostNameAllowed(true); // MongoDB 인스턴스와 같은 호스트에 있다면 false 혹은 이 명령어를 지움
+                        })
+                        .credential(MongoCredential.createMongoX509Credential(mongoClientCertificate.getSubjectX500Principal().getName()))
+                        .build()
+        );
+    }
+
+    // 연결할 MongoDB database 설정
+    @Bean
+    public MongoTemplate mongoTemplate(MongoClient client) {
+        return new MongoTemplate(client, "test");
     }
 
     @Bean
@@ -69,8 +83,7 @@ public class MongoConfig {
         try (InputStream in = new FileInputStream(keyStoreFile)) {
             keystore.load(in, keyStorePassword.toCharArray());
         }
-        KeyManagerFactory keyManagerFactory =
-                KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+        KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         keyManagerFactory.init(keystore, keyStorePassword.toCharArray());
         X509KeyManager keyManager = (X509KeyManager) keyManagerFactory.getKeyManagers()[0];
         return keyManager.getCertificateChain(keyAlias)[0];

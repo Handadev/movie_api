@@ -2,8 +2,10 @@ package com.movie_api.service.v1;
 
 import com.movie_api.common.HelperClass;
 import com.movie_api.db.MongoSeqGenerator;
+import com.movie_api.db.collection.Test;
 import com.movie_api.db.collection.User;
 import com.movie_api.db.collection.UserTokens;
+import com.movie_api.db.repo.TestRepo;
 import com.movie_api.db.repo.UserRepo;
 import com.movie_api.db.repo.UserTokenRepo;
 import com.movie_api.exception.CustomException;
@@ -25,6 +27,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserService extends HelperClass {
 
+    private final TestRepo testRepo;
     private final UserRepo userRepo;
     private final UserTokenRepo tokenRepo;
     private final MongoSeqGenerator seqGenerator;
@@ -32,7 +35,7 @@ public class UserService extends HelperClass {
 
     public HashMap<String, Object> allUser() {
         List<User> users = userRepo.findAll();
-
+//        List<Test> users = testRepo.findAll();
         if (users.isEmpty()) throw new CustomException(ErrorCode.NO_RESULT);
         return new HashMap<>(){{
             put("userList", toJsonList(users));
