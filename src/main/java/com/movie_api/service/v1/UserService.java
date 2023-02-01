@@ -14,6 +14,7 @@ import com.movie_api.util.Crypto;
 import com.movie_api.util.jwt.JwtService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -33,9 +34,10 @@ public class UserService extends HelperClass {
     private final MongoSeqGenerator seqGenerator;
     private final JwtService jwtService;
 
+    @Cacheable(cacheNames = "users", cacheManager = "userCacheManager")
     public HashMap<String, Object> allUser() {
-        List<User> users = userRepo.findAll();
-//        List<Test> users = testRepo.findAll();
+//        List<User> users = userRepo.findAll();
+        List<Test> users = testRepo.findAll();
         if (users.isEmpty()) throw new CustomException(ErrorCode.NO_RESULT);
         return new HashMap<>(){{
             put("userList", toJsonList(users));

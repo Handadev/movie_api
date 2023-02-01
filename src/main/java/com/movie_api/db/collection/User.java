@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.time.LocalDateTime;
 
 @Data
-@Document(collection = "user")
+@Document(collection = "users")
 public class User {
     @Transient
     public static final String SEQ_NAME = "user_seq";

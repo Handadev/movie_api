@@ -5,6 +5,8 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.mongodb.connection.ClusterConnectionMode;
+import com.mongodb.connection.ClusterType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
@@ -22,6 +24,7 @@ import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
@@ -36,9 +39,15 @@ public class MongoConfig {
     // X509 인증설정이된 MongoDB 연결 init 설정
     @Bean
     public MongoClient initClient(SSLContext mongoSSLContext, X509Certificate mongoClientCertificate) {
+        ServerAddress mongos1 = new ServerAddress("localhost", 9911);
+        ServerAddress mongos2 = new ServerAddress("localhost", 9912);
         return MongoClients.create(
                 MongoClientSettings.builder()
-                        .applyToClusterSettings(builder -> builder.hosts(Collections.singletonList(new ServerAddress("localhost", 9911))))
+                        .applyToClusterSettings(builder -> {
+                            builder.hosts(Arrays.asList(mongos1, mongos2));
+                            builder.mode(ClusterConnectionMode.MULTIPLE);    // 해당 설정들은 공식문서에서 어떻게 사용하는지 없음
+                            builder.requiredClusterType(ClusterType.SHARDED);//
+                        })
                         .applyToSslSettings(builder -> {
                             builder.enabled(true);
                             builder.context(mongoSSLContext);

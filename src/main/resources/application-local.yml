@@ -7,3 +7,12 @@ spring:
       username: mongo
       password: 1234qwer
       database: movie
+#  redis:
+#    sentinel:
+#      master: mymaster
+#      nodes: 192.168.35.239:26000,192.168.35.57:26000,192.168.35.5:26000
+#    host: 192.168.35.239
+#    port: 6300
+#    lettuce:
+#      shutdown-timeout: 3
+#    password: 1234qwer

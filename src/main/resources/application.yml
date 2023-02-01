@@ -27,3 +27,7 @@ secret:
 jwt:
   issuer: movie
   secret: p2s5v8y/B?E(H+MbQeThWmZq4t6w9z$C
+
+logging:
+  level:
+    web: trace
